@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
-from .forms import SignUpForm, ProfileForm, BusinessForm, PostForm
-from .models import Profile, Business, Post
+from .forms import SignUpForm, ProfileForm, BusinessForm, PostForm,NeighborhoodForm
+from .models import Profile, Business, Post,Neighborhood
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.decorators import login_required
 
@@ -69,6 +69,32 @@ def new_business(request):
         form = BusinessForm()
     return render(request, 'business.html', {'current_user':current_user, 'form':form})
 
+
+@login_required(login_url='/login/')
+def new_neighborhood(request):
+    current_user = request.user
+
+    if request.method == 'POST':
+        form = NeighborhoodForm(request.POST, request.FILES)
+        if form.is_valid():
+            neighborhood = form.save(commit=False)
+            neighborhood.user= current_user
+            neighborhood.save()
+        return redirect('home')
+    else:
+        form = NeighborhoodForm()
+    return render(request, 'newneighborhood.html', {'current_user':current_user, 'form':form})    
+
+@login_required(login_url='/login/')
+def all_neighborhood(request):
+    all_neighborhood = Neighborhood.objects.all()
+    all_neighborhood = all_neighborhood[::-1]
+    params = {
+        'all_neighborhood': all_neighborhood,
+    }
+    return render(request, 'all_neighborhood.html', params)
+
+    
 @login_required(login_url='/login/')
 def new_post(request):
     current_user = request.user
