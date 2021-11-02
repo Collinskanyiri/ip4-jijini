@@ -8,6 +8,7 @@ class Neighborhood(models.Model):
     name = models.CharField(max_length=100)
     location = models.CharField(max_length=50)
     total_occupants = models.IntegerField()
+    neighborhood_logo = models.ImageField(upload_to='images/')
     admin = models.ForeignKey(User, on_delete=models.CASCADE)
     health_contacts = models.CharField(max_length=50)
     police_contacts = models.CharField(max_length=50)
@@ -61,7 +62,7 @@ class Business(models.Model):
     pub_date = models.DateTimeField(auto_now_add=True)
     business_photo = models.ImageField(upload_to = 'posts/')
     neighborhood = models.ForeignKey(Neighborhood, on_delete = models.CASCADE)
-    bussiness_email = models.CharField(max_length = 100)
+    business_email = models.CharField(max_length = 100)
 
     def create_business(self):
         self.save()
