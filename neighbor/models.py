@@ -55,4 +55,49 @@ class Profile(models.Model):
         profile = cls.objects.filter(user=user)
         return profile
 
+class Business(models.Model):
+    business_name = models.CharField(max_length = 100)
+    user = models.ForeignKey(User, on_delete = models.CASCADE)
+    pub_date = models.DateTimeField(auto_now_add=True)
+    business_photo = models.ImageField(upload_to = 'posts/')
+    neighborhood = models.ForeignKey(Neighborhood, on_delete = models.CASCADE)
+    bussiness_email = models.CharField(max_length = 100)
 
+    def create_business(self):
+        self.save()
+
+    def save_business(self):
+        self.save()
+
+    def delete_business(self):
+        self.delete()
+
+    def update_business(self):
+        self.save()
+
+    @classmethod
+    def get_business(cls):
+        business = cls.objects.all()
+        return business
+
+    @classmethod
+    def get_business_by_user(cls, user):
+        business = cls.objects.filter(user=user)
+        return business
+
+class Post(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE,)
+    pub_date = models.DateTimeField(auto_now_add=True)
+    post_image = models.ImageField(upload_to = 'posts/')
+    caption = models.CharField(max_length=150)
+    
+    def __str__(self):
+        return self.post
+
+    def save_post(self):
+        self.save()
+
+    @classmethod
+    def get_posts(cls):
+        posts = cls.objects.all()
+        return posts
